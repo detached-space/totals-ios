@@ -1462,6 +1462,22 @@
     {
       "bankId": 9,
       "senderId": "AmharaBank",
+      "regex": "(?:Dear\\s+customer,\\s+)?Your\\s+account\\s+(?<account>[\\d\\*]+)\\s+has\\s+been\\s+debited\\s+with\\s+ETB\\s+(?<amount>[\\d,.]+)\\s+and\\s+transfered\\s+to\\s+(?<receiver>\\d+)\\s+with\\s+reference\\s+number\\s+(?<reference>[A-Z0-9]+).*?current\\s+balance\\s+is\\s+ETB\\s+(?<balance>[\\d,.]+)",
+      "type": "DEBIT",
+      "description": "Amhara Bank Transfer Debit",
+      "refRequired": true,
+      "hasAccount": true,
+      "mapping": {
+        "account": 1,
+        "amount": 2,
+        "receiver": 3,
+        "reference": 4,
+        "balance": 5
+      }
+    },
+    {
+      "bankId": 9,
+      "senderId": "AmharaBank",
       "regex": "Your\\s+account\\s+(?<account>[\\d\\*]+)\\s+has\\s+been\\s+debited\\s+with\\s+ETB\\s+(?<amount>[\\d,.]+)\\.\\s+Your\\s+current\\s+balance\\s+is\\s+ETB\\s+(?<balance>[\\d,.]+)\\.\\s+Receipt:\\s+https?:\\/\\/[^?]+\\?trx=(?<reference>[A-Z0-9]+)",
       "type": "DEBIT",
       "description": "Amhara Bank Debit (WITH Receipt)",
