@@ -1028,6 +1028,23 @@
     {
       "bankId": 6,
       "senderId": "telebirr",
+      "regex": "account\\s+(?<account>\\d+)\\s+has\\s+been\\s+credited\\s+with\\s+ETB\\s?(?<amount>[\\d,.]+)\\s+on\\s+(?<date>\\d{1,2}/\\d{1,2}/\\d{4}\\s+\\d{1,2}:\\d{2}:\\d{2})\\s+via\\s+(?<sender>.+?)\\.\\s+Your\\s+transaction\\s+number\\s+is\\s+(?<reference>[A-Z0-9]+).*?current\\s+balance\\s+is\\s+ETB\\s?(?<balance>[\\d,.]+)",
+      "type": "CREDIT",
+      "description": "Telebirr Agent Deposit",
+      "refRequired": true,
+      "hasAccount": true,
+      "mapping": {
+        "account": 1,
+        "amount": 2,
+        "date": 3,
+        "sender": 4,
+        "reference": 5,
+        "balance": 6
+      }
+    },
+    {
+      "bankId": 6,
+      "senderId": "telebirr",
       "regex": "account\\s+has\\s+been\\s+credited\\s+with\\s+ETB\\s?(?<amount>[\\d,.]+).*?current\\s+telebirr\\s+E-Money\\s+Account\\s+balance\\s+is\\s+ETB\\s?(?<balance>[\\d,.]+)",
       "type": "CREDIT",
       "description": "Telebirr Account Credit (No Reference)",
