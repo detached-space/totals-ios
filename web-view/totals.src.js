@@ -38,10 +38,12 @@ function fullPath(name) {
 // Apply staged update if one exists
 var updatePath = fullPath("totals-update.tmp");
 if (fm.fileExists(updatePath)) {
-  var scriptPath = fullPath(Script.name() + ".js");
-  var updateData = fm.read(updatePath);
-  fm.write(scriptPath, updateData);
-  fm.remove(updatePath);
+  try {
+    var scriptPath = fullPath(Script.name() + ".js");
+    var updateData = fm.read(updatePath);
+    fm.write(scriptPath, updateData);
+  } catch (e) {}
+  try { fm.remove(updatePath); } catch (e) {}
 }
 
 function readSafe(filePath, fallback) {
