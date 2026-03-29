@@ -87,6 +87,22 @@ function persistFile(name, base64String) {
   }
 }
 
+function persistTextFile(name, base64String) {
+  try {
+    var key = "textfile_" + name;
+    if (!_persistFrames[key]) {
+      _persistFrames[key] = document.createElement("iframe");
+      _persistFrames[key].style.display = "none";
+      document.body.appendChild(_persistFrames[key]);
+    }
+    _persistFrames[key].src =
+      "totals-persist://textfile?name=" +
+      encodeURIComponent(name) +
+      "&d=" +
+      encodeURIComponent(base64String);
+  } catch (e) {}
+}
+
 function requestRefresh() {
   try {
     if (!_persistFrames._refresh) {

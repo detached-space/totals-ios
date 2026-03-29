@@ -940,7 +940,7 @@ function initEventListeners() {
           if (f.name === "banks.json") banksContent = data;
           if (f.name === "sms_patterns.json") smsPatternsContent = data;
           var b64 = btoa(unescape(encodeURIComponent(data)));
-          persistFile(f.name, b64);
+          if (f.binary) { persistFile(f.name, b64); } else { persistTextFile(f.name, b64); }
           done++;
           onFileDone();
         })

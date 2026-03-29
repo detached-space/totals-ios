@@ -514,7 +514,16 @@ async function main() {
     var type = rest.substring(0, qIndex);
     var query = rest.substring(qIndex + 1);
     try {
-      if (type === "file") {
+      if (type === "textfile") {
+        // Text file: totals-persist://textfile?name=<filename>&d=<base64>
+        var nameMatch = query.match(/(?:^|&)name=([^&]*)/);
+        var dataMatch = query.match(/(?:^|&)d=([^&]*)/);
+        if (nameMatch && dataMatch) {
+          var fileName = decodeURIComponent(nameMatch[1]);
+          var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
+          fm.writeString(fullPath(fileName), fileData.toRawString());
+        }
+      } else if (type === "file") {
         // Binary file: totals-persist://file?name=<filename>&d=<base64>
         var nameMatch = query.match(/(?:^|&)name=([^&]*)/);
         var dataMatch = query.match(/(?:^|&)d=([^&]*)/);
