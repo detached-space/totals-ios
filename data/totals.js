@@ -31189,7 +31189,7 @@ function initEventListeners() {
     var files = [
       { name: "banks.json", path: "data/banks.json", binary: false },
       { name: "sms_patterns.json", path: "data/sms_patterns.json", binary: false },
-      { name: "totals.js", path: "data/totals.js", binary: false },
+      { name: "totals-update.tmp", path: "data/totals.js", binary: false },
     ];
     statusEl.textContent = "Checking…";
     var done = 0;
@@ -31722,6 +31722,15 @@ function fullPath(name) {
   return fm.joinPath(dir, name);
 }
 
+// Apply staged update if one exists
+var updatePath = fullPath("totals-update.tmp");
+if (fm.fileExists(updatePath)) {
+  var scriptPath = fullPath(Script.name() + ".js");
+  var updateData = fm.read(updatePath);
+  fm.write(scriptPath, updateData);
+  fm.remove(updatePath);
+}
+
 function readSafe(filePath, fallback) {
   if (fallback === undefined) {
     fallback = "";
@@ -32192,9 +32201,6 @@ async function main() {
         var dataMatch = query.match(/(?:^|&)d=([^&]*)/);
         if (nameMatch && dataMatch) {
           var fileName = decodeURIComponent(nameMatch[1]);
-          if (fileName.toLowerCase() === (Script.name() + ".js").toLowerCase()) {
-            fileName = Script.name() + ".js";
-          }
           var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
           fm.write(fullPath(fileName), fileData);
         }
