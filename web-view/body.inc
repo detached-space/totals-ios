@@ -332,7 +332,6 @@
   <div class="screens-wrapper" id="screens-wrapper">
   <!-- Home Screen -->
   <div id="screen-home" class="screen active">
-    <div style="text-align:center;padding:8px;font-size:12px;color:#888;">v1.0.0-test</div>
     <div class="balance-card">
       <div class="balance-label">TOTAL BALANCE</div>
       <div class="balance-row">
