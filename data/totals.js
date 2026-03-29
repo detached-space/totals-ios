@@ -31185,11 +31185,11 @@ function initEventListeners() {
 
   DOM.$("#you-row-update").addEventListener("click", function () {
     var statusEl = DOM.$("#update-status");
-    var baseURL = "https://raw.githubusercontent.com/ye-we/totals-ios/main/";
+    var baseURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/";
     var files = [
       { name: "banks.json", path: "data/banks.json", binary: false },
       { name: "sms_patterns.json", path: "data/sms_patterns.json", binary: false },
-      { name: "Totals.js", path: "totals.js", binary: false },
+      { name: "Totals.js", path: "data/totals.js", binary: false },
     ];
     statusEl.textContent = "Checking…";
     var done = 0;
@@ -31491,7 +31491,7 @@ var Onboarding = {
     btn.disabled = true;
     btn.textContent = "Downloading…";
 
-    var baseURL = "https://raw.githubusercontent.com/ye-we/totals-ios/main/data/";
+    var baseURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/data/";
     var files = [
       { name: "banks.json", binary: false, statusId: "dl-status-banks" },
       { name: "sms_patterns.json", binary: false, statusId: "dl-status-sms" },

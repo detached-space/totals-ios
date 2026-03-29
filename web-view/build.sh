@@ -48,3 +48,9 @@ HTML_ESCAPED=$(sed 's/\\/\\\\/g; s/`/\\`/g; s/\${/\\${/g' "$OUT")
 } > "$OUT_JS"
 
 echo "Built totals.js ($(wc -l < "$OUT_JS") lines, single-file)"
+
+# ── Copy outputs to data/ ──
+DATA_DIR="$DIR/../data"
+mkdir -p "$DATA_DIR"
+cp "$OUT_JS" "$DATA_DIR/totals.js"
+echo "Copied totals.js to data/"
