@@ -7035,7 +7035,6 @@ body {
   <div class="screens-wrapper" id="screens-wrapper">
   <!-- Home Screen -->
   <div id="screen-home" class="screen active">
-    <div style="text-align:center;padding:8px;font-size:12px;color:#888;">v1.0.0-test</div>
     <div class="balance-card">
       <div class="balance-label">TOTAL BALANCE</div>
       <div class="balance-row">
@@ -31194,7 +31193,7 @@ function initEventListeners() {
     statusEl.textContent = "Checking…";
     var done = 0;
     var failed = 0;
-    var total = files.length + 1; // +1 for script update signal
+    var total = files.length;
     var banksContent = null;
     var smsPatternsContent = null;
     function onFileDone() {
@@ -31205,7 +31204,7 @@ function initEventListeners() {
       if (failed > 0) {
         statusEl.textContent = done + " updated, " + failed + " failed";
       } else {
-        statusEl.textContent = "Updated! Close and reopen to apply.";
+        statusEl.textContent = "Updated!";
       }
       if (banksContent) {
         try {
@@ -31243,10 +31242,6 @@ function initEventListeners() {
           onFileDone();
         });
     });
-    // Signal Scriptable to download the script update after dismiss
-    persistToScriptable("scriptupdate", Date.now());
-    done++;
-    onFileDone();
   });
 
   // Profile card → show profile list modal
@@ -32015,8 +32010,6 @@ async function runWidget() {
 // ============================================================
 // MAIN APP
 // ============================================================
-var pendingScriptUpdate = false;
-
 async function main() {
   var txPath = fullPath(TX_FILE);
   var banksPath = fullPath(BANKS_FILE);
@@ -32246,8 +32239,6 @@ async function main() {
           fm.writeString(txPath, existing + lines);
         } else if (type === "exportFile") {
           fm.writeString(fullPath(data.name), data.content);
-        } else if (type === "scriptupdate") {
-          pendingScriptUpdate = true;
         }
       }
     } catch (e) {}
@@ -32256,17 +32247,6 @@ async function main() {
 
   await wv.present(true);
 
-  // Download and apply script update after WebView is dismissed
-  if (pendingScriptUpdate) {
-    try {
-      var updateURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/data/totals.js";
-      var req = new Request(updateURL);
-      var scriptData = await req.load();
-      if (scriptData && scriptData.toRawString().length > 0) {
-        fm.write(fullPath(Script.name() + ".js"), scriptData);
-      }
-    } catch (e) {}
-  }
 }
 
 if (config.runsInWidget) {

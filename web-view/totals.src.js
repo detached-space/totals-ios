@@ -323,8 +323,6 @@ async function runWidget() {
 // ============================================================
 // MAIN APP
 // ============================================================
-var pendingScriptUpdate = false;
-
 async function main() {
   var htmlPath = fullPath(HTML_FILE);
   var txPath = fullPath(TX_FILE);
@@ -569,8 +567,6 @@ async function main() {
           fm.writeString(txPath, existing + lines);
         } else if (type === "exportFile") {
           fm.writeString(fullPath(data.name), data.content);
-        } else if (type === "scriptupdate") {
-          pendingScriptUpdate = true;
         }
       }
     } catch (e) {}
@@ -579,17 +575,6 @@ async function main() {
 
   await wv.present(true);
 
-  // Download and apply script update after WebView is dismissed
-  if (pendingScriptUpdate) {
-    try {
-      var updateURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/data/totals.js";
-      var req = new Request(updateURL);
-      var scriptData = await req.load();
-      if (scriptData && scriptData.toRawString().length > 0) {
-        fm.write(fullPath(Script.name() + ".js"), scriptData);
-      }
-    } catch (e) {}
-  }
 }
 
 if (config.runsInWidget) {

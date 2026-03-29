@@ -900,7 +900,7 @@ function initEventListeners() {
     statusEl.textContent = "Checking…";
     var done = 0;
     var failed = 0;
-    var total = files.length + 1; // +1 for script update signal
+    var total = files.length;
     var banksContent = null;
     var smsPatternsContent = null;
     function onFileDone() {
@@ -911,7 +911,7 @@ function initEventListeners() {
       if (failed > 0) {
         statusEl.textContent = done + " updated, " + failed + " failed";
       } else {
-        statusEl.textContent = "Updated! Close and reopen to apply.";
+        statusEl.textContent = "Updated!";
       }
       if (banksContent) {
         try {
@@ -949,10 +949,6 @@ function initEventListeners() {
           onFileDone();
         });
     });
-    // Signal Scriptable to download the script update after dismiss
-    persistToScriptable("scriptupdate", Date.now());
-    done++;
-    onFileDone();
   });
 
   // Profile card → show profile list modal
