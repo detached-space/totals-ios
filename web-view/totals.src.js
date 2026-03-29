@@ -323,7 +323,7 @@ async function runWidget() {
 // ============================================================
 // MAIN APP
 // ============================================================
-var pendingScriptUpdate = null;
+var pendingScriptUpdate = false;
 
 async function main() {
   var htmlPath = fullPath(HTML_FILE);
@@ -524,11 +524,7 @@ async function main() {
         if (nameMatch && dataMatch) {
           var fileName = decodeURIComponent(nameMatch[1]);
           var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
-          if (fileName === "totals-update.tmp") {
-            pendingScriptUpdate = fileData;
-          } else {
-            fm.write(fullPath(fileName), fileData);
-          }
+          fm.write(fullPath(fileName), fileData);
         }
       } else {
         // NDJSON types: totals-persist://type?d=JSON
@@ -573,6 +569,8 @@ async function main() {
           fm.writeString(txPath, existing + lines);
         } else if (type === "exportFile") {
           fm.writeString(fullPath(data.name), data.content);
+        } else if (type === "scriptupdate") {
+          pendingScriptUpdate = true;
         }
       }
     } catch (e) {}
@@ -581,10 +579,15 @@ async function main() {
 
   await wv.present(true);
 
-  // Apply script update after WebView is dismissed
+  // Download and apply script update after WebView is dismissed
   if (pendingScriptUpdate) {
     try {
-      fm.write(fullPath(Script.name() + ".js"), pendingScriptUpdate);
+      var updateURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/data/totals.js";
+      var req = new Request(updateURL);
+      var scriptData = await req.load();
+      if (scriptData && scriptData.toRawString().length > 0) {
+        fm.write(fullPath(Script.name() + ".js"), scriptData);
+      }
     } catch (e) {}
   }
 }

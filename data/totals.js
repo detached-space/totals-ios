@@ -31188,18 +31188,18 @@ function initEventListeners() {
     var statusEl = DOM.$("#update-status");
     var baseURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/";
     var files = [
-      { name: "banks.json", path: "data/banks.json", binary: false },
-      { name: "sms_patterns.json", path: "data/sms_patterns.json", binary: false },
-      { name: "totals-update.tmp", path: "data/totals.js", binary: false },
+      { name: "banks.json", path: "data/banks.json" },
+      { name: "sms_patterns.json", path: "data/sms_patterns.json" },
     ];
     statusEl.textContent = "Checking…";
     var done = 0;
     var failed = 0;
+    var total = files.length + 1; // +1 for script update signal
     var banksContent = null;
     var smsPatternsContent = null;
     function onFileDone() {
-      if (done + failed < files.length) {
-        statusEl.textContent = "Updating " + done + "/" + files.length + "…";
+      if (done + failed < total) {
+        statusEl.textContent = "Updating " + done + "/" + total + "…";
         return;
       }
       if (failed > 0) {
@@ -31207,7 +31207,6 @@ function initEventListeners() {
       } else {
         statusEl.textContent = "Updated! Close and reopen to apply.";
       }
-      // Reload banks + patterns into State so they take effect immediately
       if (banksContent) {
         try {
           var banksData = Parser.parseBanks(banksContent);
@@ -31224,6 +31223,7 @@ function initEventListeners() {
         } catch (e) {}
       }
     }
+    // Update data files via persist
     files.forEach(function (f) {
       fetch(baseURL + f.path)
         .then(function (res) {
@@ -31243,6 +31243,10 @@ function initEventListeners() {
           onFileDone();
         });
     });
+    // Signal Scriptable to download the script update after dismiss
+    persistToScriptable("scriptupdate", "true");
+    done++;
+    onFileDone();
   });
 
   // Profile card → show profile list modal
@@ -32011,7 +32015,7 @@ async function runWidget() {
 // ============================================================
 // MAIN APP
 // ============================================================
-var pendingScriptUpdate = null;
+var pendingScriptUpdate = false;
 
 async function main() {
   var txPath = fullPath(TX_FILE);
@@ -32197,11 +32201,7 @@ async function main() {
         if (nameMatch && dataMatch) {
           var fileName = decodeURIComponent(nameMatch[1]);
           var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
-          if (fileName === "totals-update.tmp") {
-            pendingScriptUpdate = fileData;
-          } else {
-            fm.write(fullPath(fileName), fileData);
-          }
+          fm.write(fullPath(fileName), fileData);
         }
       } else {
         // NDJSON types: totals-persist://type?d=JSON
@@ -32246,6 +32246,8 @@ async function main() {
           fm.writeString(txPath, existing + lines);
         } else if (type === "exportFile") {
           fm.writeString(fullPath(data.name), data.content);
+        } else if (type === "scriptupdate") {
+          pendingScriptUpdate = true;
         }
       }
     } catch (e) {}
@@ -32254,10 +32256,15 @@ async function main() {
 
   await wv.present(true);
 
-  // Apply script update after WebView is dismissed
+  // Download and apply script update after WebView is dismissed
   if (pendingScriptUpdate) {
     try {
-      fm.write(fullPath(Script.name() + ".js"), pendingScriptUpdate);
+      var updateURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/data/totals.js";
+      var req = new Request(updateURL);
+      var scriptData = await req.load();
+      if (scriptData && scriptData.toRawString().length > 0) {
+        fm.write(fullPath(Script.name() + ".js"), scriptData);
+      }
     } catch (e) {}
   }
 }

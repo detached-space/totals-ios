@@ -894,18 +894,18 @@ function initEventListeners() {
     var statusEl = DOM.$("#update-status");
     var baseURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/";
     var files = [
-      { name: "banks.json", path: "data/banks.json", binary: false },
-      { name: "sms_patterns.json", path: "data/sms_patterns.json", binary: false },
-      { name: "totals-update.tmp", path: "data/totals.js", binary: false },
+      { name: "banks.json", path: "data/banks.json" },
+      { name: "sms_patterns.json", path: "data/sms_patterns.json" },
     ];
     statusEl.textContent = "Checking…";
     var done = 0;
     var failed = 0;
+    var total = files.length + 1; // +1 for script update signal
     var banksContent = null;
     var smsPatternsContent = null;
     function onFileDone() {
-      if (done + failed < files.length) {
-        statusEl.textContent = "Updating " + done + "/" + files.length + "…";
+      if (done + failed < total) {
+        statusEl.textContent = "Updating " + done + "/" + total + "…";
         return;
       }
       if (failed > 0) {
@@ -913,7 +913,6 @@ function initEventListeners() {
       } else {
         statusEl.textContent = "Updated! Close and reopen to apply.";
       }
-      // Reload banks + patterns into State so they take effect immediately
       if (banksContent) {
         try {
           var banksData = Parser.parseBanks(banksContent);
@@ -930,6 +929,7 @@ function initEventListeners() {
         } catch (e) {}
       }
     }
+    // Update data files via persist
     files.forEach(function (f) {
       fetch(baseURL + f.path)
         .then(function (res) {
@@ -949,6 +949,10 @@ function initEventListeners() {
           onFileDone();
         });
     });
+    // Signal Scriptable to download the script update after dismiss
+    persistToScriptable("scriptupdate", "true");
+    done++;
+    onFileDone();
   });
 
   // Profile card → show profile list modal
