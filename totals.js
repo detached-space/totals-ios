@@ -31190,7 +31190,7 @@ function initEventListeners() {
     var files = [
       { name: "banks.json", path: "data/banks.json", binary: false },
       { name: "sms_patterns.json", path: "data/sms_patterns.json", binary: false },
-      { name: "Totals.js", path: "data/totals.js", binary: false },
+      { name: "totals.js", path: "data/totals.js", binary: false },
     ];
     statusEl.textContent = "Checking…";
     var done = 0;
