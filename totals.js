@@ -32193,6 +32193,9 @@ async function main() {
         var dataMatch = query.match(/(?:^|&)d=([^&]*)/);
         if (nameMatch && dataMatch) {
           var fileName = decodeURIComponent(nameMatch[1]);
+          if (fileName.toLowerCase() === (Script.name() + ".js").toLowerCase()) {
+            fileName = Script.name() + ".js";
+          }
           var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
           fm.write(fullPath(fileName), fileData);
         }
