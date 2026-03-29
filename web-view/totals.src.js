@@ -574,23 +574,6 @@ async function main() {
   };
 
   await wv.present(true);
-
-  // Apply script update after WebView is dismissed
-  try {
-    var settingsRaw2 = readSafe(settingsPath, "{}");
-    var settingsObj2 = JSON.parse(settingsRaw2);
-    if (settingsObj2.pendingScriptUpdate) {
-      var updateURL = "https://raw.githubusercontent.com/detached-space/totals-ios/main/data/totals.js?t=" + Date.now();
-      var req = new Request(updateURL);
-      req.headers = { "Cache-Control": "no-cache" };
-      var scriptContent = await req.loadString();
-      if (scriptContent && scriptContent.length > 1000) {
-        fm.writeString(fullPath(Script.name() + ".js"), scriptContent);
-      }
-      delete settingsObj2.pendingScriptUpdate;
-      fm.writeString(settingsPath, JSON.stringify(settingsObj2));
-    }
-  } catch (e) {}
 }
 
 if (config.runsInWidget) {

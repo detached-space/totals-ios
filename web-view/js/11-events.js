@@ -900,7 +900,7 @@ function initEventListeners() {
     statusEl.textContent = "Checking…";
     var done = 0;
     var failed = 0;
-    var total = files.length + 1;
+    var total = files.length;
     var banksContent = null;
     var smsPatternsContent = null;
     function onFileDone() {
@@ -911,7 +911,7 @@ function initEventListeners() {
       if (failed > 0) {
         statusEl.textContent = done + " updated, " + failed + " failed";
       } else {
-        statusEl.textContent = "Updated! Close and reopen to apply.";
+        statusEl.textContent = "Updated!";
       }
       if (banksContent) {
         try {
@@ -949,18 +949,6 @@ function initEventListeners() {
           onFileDone();
         });
     });
-    // Check for script update - write flag to settings file
-    fetch(baseURL + "data/totals.js?t=" + Date.now(), { cache: "no-store", method: "HEAD" })
-      .then(function () {
-        // Signal via settings that a script update is pending
-        persistToScriptable("settings", Object.assign({}, State.settings || {}, { pendingScriptUpdate: true }));
-        done++;
-        onFileDone();
-      })
-      .catch(function () {
-        failed++;
-        onFileDone();
-      });
   });
 
   // Profile card → show profile list modal
