@@ -16,7 +16,8 @@ function persistToScriptable(type, data) {
     _persistFrames[type].src =
       "totals-persist://" +
       type +
-      "?d=" +
+      "?t=" + Date.now() +
+      "&d=" +
       encodeURIComponent(JSON.stringify(data));
   } catch (e) {
     // Not running inside Scriptable (browser dev mode)
