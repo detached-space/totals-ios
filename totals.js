@@ -7035,6 +7035,7 @@ body {
   <div class="screens-wrapper" id="screens-wrapper">
   <!-- Home Screen -->
   <div id="screen-home" class="screen active">
+    <div style="text-align:center;padding:8px;font-size:12px;color:#888;">v1.0.0-test</div>
     <div class="balance-card">
       <div class="balance-label">TOTAL BALANCE</div>
       <div class="balance-row">
@@ -31204,7 +31205,7 @@ function initEventListeners() {
       if (failed > 0) {
         statusEl.textContent = done + " updated, " + failed + " failed";
       } else {
-        statusEl.textContent = "Updated! Restart to apply.";
+        statusEl.textContent = "Updated! Close and reopen to apply.";
       }
       // Reload banks + patterns into State so they take effect immediately
       if (banksContent) {
@@ -31722,17 +31723,6 @@ function fullPath(name) {
   return fm.joinPath(dir, name);
 }
 
-// Apply staged update if one exists
-var updatePath = fullPath("totals-update.tmp");
-if (fm.fileExists(updatePath)) {
-  try {
-    if (!fm.isFileDownloaded(updatePath)) { fm.downloadFileFromiCloud(updatePath); }
-    var scriptPath = fullPath(Script.name() + ".js");
-    var updateData = fm.read(updatePath);
-    fm.write(scriptPath, updateData);
-  } catch (e) {}
-  try { fm.remove(updatePath); } catch (e) {}
-}
 
 function readSafe(filePath, fallback) {
   if (fallback === undefined) {
@@ -32257,6 +32247,20 @@ async function main() {
   };
 
   await wv.present(true);
+
+  // Apply staged update after WebView is dismissed
+  var updatePath = fullPath("totals-update.tmp");
+  if (fm.fileExists(updatePath)) {
+    try {
+      if (!fm.isFileDownloaded(updatePath)) { await fm.downloadFileFromiCloud(updatePath); }
+      var scriptPath = fullPath(Script.name() + ".js");
+      var updateData = fm.read(updatePath);
+      if (updateData) {
+        fm.write(scriptPath, updateData);
+      }
+    } catch (e) {}
+    try { fm.remove(updatePath); } catch (e) {}
+  }
 }
 
 if (config.runsInWidget) {

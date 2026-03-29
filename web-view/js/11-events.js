@@ -911,7 +911,7 @@ function initEventListeners() {
       if (failed > 0) {
         statusEl.textContent = done + " updated, " + failed + " failed";
       } else {
-        statusEl.textContent = "Updated! Restart to apply.";
+        statusEl.textContent = "Updated! Close and reopen to apply.";
       }
       // Reload banks + patterns into State so they take effect immediately
       if (banksContent) {

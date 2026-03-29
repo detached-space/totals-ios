@@ -35,17 +35,6 @@ function fullPath(name) {
   return fm.joinPath(dir, name);
 }
 
-// Apply staged update if one exists
-var updatePath = fullPath("totals-update.tmp");
-if (fm.fileExists(updatePath)) {
-  try {
-    if (!fm.isFileDownloaded(updatePath)) { fm.downloadFileFromiCloud(updatePath); }
-    var scriptPath = fullPath(Script.name() + ".js");
-    var updateData = fm.read(updatePath);
-    fm.write(scriptPath, updateData);
-  } catch (e) {}
-  try { fm.remove(updatePath); } catch (e) {}
-}
 
 function readSafe(filePath, fallback) {
   if (fallback === undefined) {
@@ -585,6 +574,20 @@ async function main() {
   };
 
   await wv.present(true);
+
+  // Apply staged update after WebView is dismissed
+  var updatePath = fullPath("totals-update.tmp");
+  if (fm.fileExists(updatePath)) {
+    try {
+      if (!fm.isFileDownloaded(updatePath)) { await fm.downloadFileFromiCloud(updatePath); }
+      var scriptPath = fullPath(Script.name() + ".js");
+      var updateData = fm.read(updatePath);
+      if (updateData) {
+        fm.write(scriptPath, updateData);
+      }
+    } catch (e) {}
+    try { fm.remove(updatePath); } catch (e) {}
+  }
 }
 
 if (config.runsInWidget) {
