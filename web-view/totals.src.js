@@ -39,6 +39,7 @@ function fullPath(name) {
 var updatePath = fullPath("totals-update.tmp");
 if (fm.fileExists(updatePath)) {
   try {
+    if (!fm.isFileDownloaded(updatePath)) { fm.downloadFileFromiCloud(updatePath); }
     var scriptPath = fullPath(Script.name() + ".js");
     var updateData = fm.read(updatePath);
     fm.write(scriptPath, updateData);
