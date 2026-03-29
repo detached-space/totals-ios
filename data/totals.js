@@ -21346,22 +21346,6 @@ function persistFile(name, base64String) {
   }
 }
 
-function persistTextFile(name, base64String) {
-  try {
-    var key = "textfile_" + name;
-    if (!_persistFrames[key]) {
-      _persistFrames[key] = document.createElement("iframe");
-      _persistFrames[key].style.display = "none";
-      document.body.appendChild(_persistFrames[key]);
-    }
-    _persistFrames[key].src =
-      "totals-persist://textfile?name=" +
-      encodeURIComponent(name) +
-      "&d=" +
-      encodeURIComponent(base64String);
-  } catch (e) {}
-}
-
 function requestRefresh() {
   try {
     if (!_persistFrames._refresh) {
@@ -31249,7 +31233,7 @@ function initEventListeners() {
           if (f.name === "banks.json") banksContent = data;
           if (f.name === "sms_patterns.json") smsPatternsContent = data;
           var b64 = btoa(unescape(encodeURIComponent(data)));
-          if (f.binary) { persistFile(f.name, b64); } else { persistTextFile(f.name, b64); }
+          persistFile(f.name, b64);
           done++;
           onFileDone();
         })
@@ -32202,23 +32186,16 @@ async function main() {
     var type = rest.substring(0, qIndex);
     var query = rest.substring(qIndex + 1);
     try {
-      if (type === "textfile") {
-        // Text file: totals-persist://textfile?name=<filename>&d=<base64>
+      if (type === "file") {
+        // File: totals-persist://file?name=<filename>&d=<base64>
         var nameMatch = query.match(/(?:^|&)name=([^&]*)/);
         var dataMatch = query.match(/(?:^|&)d=([^&]*)/);
         if (nameMatch && dataMatch) {
           var fileName = decodeURIComponent(nameMatch[1]);
+          var filePath = fullPath(fileName);
           var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
-          fm.writeString(fullPath(fileName), fileData.toRawString());
-        }
-      } else if (type === "file") {
-        // Binary file: totals-persist://file?name=<filename>&d=<base64>
-        var nameMatch = query.match(/(?:^|&)name=([^&]*)/);
-        var dataMatch = query.match(/(?:^|&)d=([^&]*)/);
-        if (nameMatch && dataMatch) {
-          var fileName = decodeURIComponent(nameMatch[1]);
-          var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
-          fm.write(fullPath(fileName), fileData);
+          if (fm.fileExists(filePath)) { fm.remove(filePath); }
+          fm.write(filePath, fileData);
         }
       } else {
         // NDJSON types: totals-persist://type?d=JSON
