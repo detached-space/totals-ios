@@ -323,6 +323,8 @@ async function runWidget() {
 // ============================================================
 // MAIN APP
 // ============================================================
+var pendingScriptUpdate = null;
+
 async function main() {
   var htmlPath = fullPath(HTML_FILE);
   var txPath = fullPath(TX_FILE);
@@ -522,7 +524,11 @@ async function main() {
         if (nameMatch && dataMatch) {
           var fileName = decodeURIComponent(nameMatch[1]);
           var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
-          fm.write(fullPath(fileName), fileData);
+          if (fileName === "totals-update.tmp") {
+            pendingScriptUpdate = fileData;
+          } else {
+            fm.write(fullPath(fileName), fileData);
+          }
         }
       } else {
         // NDJSON types: totals-persist://type?d=JSON
@@ -575,18 +581,11 @@ async function main() {
 
   await wv.present(true);
 
-  // Apply staged update after WebView is dismissed
-  var updatePath = fullPath("totals-update.tmp");
-  if (fm.fileExists(updatePath)) {
+  // Apply script update after WebView is dismissed
+  if (pendingScriptUpdate) {
     try {
-      if (!fm.isFileDownloaded(updatePath)) { await fm.downloadFileFromiCloud(updatePath); }
-      var scriptPath = fullPath(Script.name() + ".js");
-      var updateData = fm.read(updatePath);
-      if (updateData) {
-        fm.write(scriptPath, updateData);
-      }
+      fm.write(fullPath(Script.name() + ".js"), pendingScriptUpdate);
     } catch (e) {}
-    try { fm.remove(updatePath); } catch (e) {}
   }
 }
 
