@@ -1,6 +1,6 @@
 # Totals for iOS
 
-A personal finance tracker for Ethiopian banks. It reads your bank SMS notifications and turns them into a clear, organized dashboard — across all your banks, in one place.
+A personal finance tracker for Ethiopian banks. It reads your bank SMS notifications and turns them into a clear, organized dashboard across all your banks, in one place.
 
 In Ethiopia, every bank transaction triggers an SMS. Totals captures these messages, parses them, and builds your complete financial picture without you typing a single number.
 
@@ -15,7 +15,7 @@ The only universal record of your transactions is SMS. Every bank sends them. To
 Apple doesn't let apps read SMS directly. Totals works around this using **iOS Shortcuts** and **Scriptable**.
 
 ```
-Bank SMS → iOS Shortcuts automation → parse & save → Scriptable WebView dashboard
+Bank SMS > iOS Shortcuts automation > parse & save > Scriptable WebView dashboard
 ```
 
 1. An iOS Shortcuts automation triggers on any SMS containing "ETB"
@@ -38,18 +38,18 @@ Setup requires a one-time configuration, but once done, everything is automatic.
 | Telebirr | Mobile Money |
 | M-Pesa | Mobile Money |
 
-Each bank has multiple SMS formats for different transaction types — transfers, deposits, withdrawals, agent transactions, airtime, fees, and more.
+Each bank has multiple SMS formats for different transaction types: transfers, deposits, withdrawals, agent transactions, airtime, fees, and more.
 
 ## Features
 
-- **Multi-bank dashboard** — Total balance, daily/weekly summaries, recent transactions, and charts on one screen
-- **Transaction tracking** — Every parsed SMS becomes a searchable, filterable record. Filter by bank, account, date, type, or category
-- **Categories** — Tag transactions as Food, Transport, Rent, etc. Create custom categories. Set up auto-categorization rules
-- **Budgeting** — YNAB-inspired budgeting with category groups, monthly assignments, progress tracking, and spending pace
-- **Multiple accounts** — Name and organize accounts across all your banks
-- **QR sharing** — Generate QR codes with your bank details for easy sharing
-- **Tools** — Contacts (saved bank details), manual SMS parser, failed message review, payment verifier
-- **Charts** — Spending breakdowns by bank/category, income vs expense, trends over time
+- **Multi-bank dashboard** - Total balance, daily/weekly summaries, recent transactions, and charts on one screen
+- **Transaction tracking** - Every parsed SMS becomes a searchable, filterable record. Filter by bank, account, date, type, or category
+- **Categories** - Tag transactions as Food, Transport, Rent, etc. Create custom categories. Set up auto-categorization rules
+- **Budgeting** - YNAB-inspired budgeting with category groups, monthly assignments, progress tracking, and spending pace
+- **Multiple accounts** - Name and organize accounts across all your banks
+- **QR sharing** - Generate QR codes with your bank details for easy sharing
+- **Tools** - Contacts (saved bank details), manual SMS parser, failed message review, payment verifier
+- **Charts** - Spending breakdowns by bank/category, income vs expense, trends over time
 
 ## Privacy
 
@@ -68,11 +68,11 @@ Each bank has multiple SMS formats for different transaction types — transfers
 
 ### Quick Start
 
-1. Open the Totals app — the onboarding guide will walk you through each step
-2. **Download assets** — banks.json, sms_patterns.json, and logo
-3. **Install the SMS shortcut** — adds the parsing shortcut to your Shortcuts app
-4. **Link automation** — create a Shortcuts automation that triggers on SMS containing "ETB", set to Run Immediately, and linked to the Totals shortcut
-5. **Optional** — add to Home Screen, add your first account
+1. Open the Totals app. The onboarding guide will walk you through each step
+2. **Download assets** - banks.json, sms_patterns.json, and logo
+3. **Install the SMS shortcut** - adds the parsing shortcut to your Shortcuts app
+4. **Link automation** - create a Shortcuts automation that triggers on SMS containing "ETB", set to Run Immediately, and linked to the Totals shortcut
+5. **Optional** - add to Home Screen, add your first account
 
 That's it. Incoming bank SMS messages will be automatically parsed and appear in the app.
 
@@ -109,7 +109,7 @@ totals-ios/
 
 ### Local Development
 
-Run the app in a browser with sample data — no iPhone or Scriptable needed:
+Run the app in a browser with sample data, no iPhone or Scriptable needed:
 
 ```bash
 bash web-view/serve.sh        # starts server on :3000, opens browser
@@ -130,8 +130,8 @@ bash web-view/build.sh
 ```
 
 This concatenates all source files into two outputs:
-- `totals.html` — standalone HTML file
-- `totals.js` — single-file Scriptable script with HTML embedded
+- `totals.html` - standalone HTML file
+- `totals.js` - single-file Scriptable script with HTML embedded
 
 ### Data Format
 
@@ -147,10 +147,10 @@ All data files live in `iCloud Drive/Scriptable/` and sync via iCloud.
 
 Contributions are welcome. Some areas that could use help:
 
-- **New bank patterns** — Add SMS patterns for banks not yet supported
-- **Pattern fixes** — If a bank SMS isn't being parsed correctly, submit the (anonymized) message format and a fix
-- **UI improvements** — The dashboard is pure HTML/CSS/JS, easy to hack on
-- **Bug reports** — Open an issue with steps to reproduce
+- **New bank patterns** - Add SMS patterns for banks not yet supported
+- **Pattern fixes** - If a bank SMS isn't being parsed correctly, submit the (anonymized) message format and a fix
+- **UI improvements** - The dashboard is pure HTML/CSS/JS, easy to hack on
+- **Bug reports** - Open an issue with steps to reproduce
 
 ### Adding a New Bank SMS Pattern
 

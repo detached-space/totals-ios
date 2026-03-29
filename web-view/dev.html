@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <title>Totals (Dev)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<script>
+(async () => {
+  // ── 1. Fetch body markup (.inc avoids Live Server injection) ──
+  const bodyResp = await fetch('body.inc');
+  if (!bodyResp.ok) {
+    document.body.innerHTML = '<pre>Failed to load body.inc — is a local server running?</pre>';
+    return;
+  }
+  document.body.insertAdjacentHTML('afterbegin', await bodyResp.text());
+
+  // ── 2. Inject data tags (mimics what totals.js does) ──
+  const DATA_SOURCES = [
+    ['_dsmspatterns', '../data/sms_patterns.json'],
+    ['_dprofiles',   null],
+    ['_daccountoverrides', 'dev-data/account_overrides.txt'],
+    ['_dcontacts',   null],
+    ['_dbudgets',    null],
+    ['_dcustomcats', null],
+    ['_drules',      null],
+    ['_dcategories', null],
+    ['_daccounts',   'dev-data/accounts.txt'],
+    ['_dfailed',     'dev-data/failed_parsings.txt'],
+    ['_dbanks',      'dev-data/banks.json'],
+    ['_dtx',         'dev-data/transactions.txt'],
+  ];
+
+  for (const [id, url] of DATA_SOURCES) {
+    const el = document.createElement('script');
+    el.type = 'application/json';
+    el.id = id;
+
+    // Check localStorage first (dev persistence from previous session)
+    const PERSIST_TYPES = {
+      '_daccounts': 'accounts',
+      '_dcategories': 'categories',
+      '_drules': 'rules',
+      '_dcustomcats': 'customCategories',
+      '_dbudgets': 'budgets',
+      '_dcontacts': 'contacts',
+      '_daccountoverrides': 'accountOverrides',
+      '_dprofiles': 'profiles',
+    };
+    const persistKey = PERSIST_TYPES[id];
+    const stored = persistKey && localStorage.getItem('totals-dev-' + persistKey);
+
+    if (stored) {
+      // Convert JSON array back to NDJSON (one JSON object per line)
+      try {
+        const arr = JSON.parse(stored);
+        el.textContent = arr.map(item => JSON.stringify(item)).join('\n');
+      } catch (e) {
+        el.textContent = stored;
+      }
+    } else if (url) {
+      try {
+        const r = await fetch(url);
+        if (r.ok) el.textContent = await r.text();
+      } catch (e) { /* file not found — empty is fine */ }
+    }
+
+    document.body.prepend(el);
+  }
+
+  // ── 2b. Onboarding dev support ──
+  if (new URLSearchParams(location.search).has("onboarding")) {
+    var obEl = document.createElement("script");
+    obEl.type = "application/json";
+    obEl.id = "_donboarding";
+    obEl.textContent = "true";
+    document.body.prepend(obEl);
+    localStorage.removeItem("totals-onboarding-done");
+  }
+
+  // ── 3. Tell 11-events.js not to auto-init (we call init() ourselves) ──
+  window.__devMode = true;
+
+  // ── 4. Load app scripts in dependency order ──
+  const SCRIPTS = [
+    'js/00-jsqr.js',
+    'js/00-qrcode.js',
+    'js/01-persist.js',
+    'js/02-parser.js',
+    'js/03-state.js',
+    'js/04-analytics.js',
+    'js/05-dom.js',
+    'js/06-filters.js',
+    'js/07-ui.js',
+    'js/08-charts.js',
+    'js/09-nav.js',
+    'js/10-modals.js',
+    'js/11-events.js',
+  ];
+
+  for (const src of SCRIPTS) {
+    await new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = src + '?v=' + Date.now();
+      s.onload = resolve;
+      s.onerror = () => { console.error('[dev] Failed to load:', src); resolve(); };
+      document.body.appendChild(s);
+    });
+  }
+
+  // ── 5. Override persist for dev (save to localStorage) ──
+  window.persistToScriptable = function (type, data) {
+    try {
+      localStorage.setItem('totals-dev-' + type, JSON.stringify(data));
+    } catch (e) { /* quota exceeded or unavailable */ }
+  };
+  // Re-bind the helpers so they use the new persistToScriptable
+  window.persistAccounts = function () { persistToScriptable('accounts', State.accounts); };
+  window.persistCategories = function () { persistToScriptable('categories', State.categories); };
+  window.persistRules = function () { persistToScriptable('rules', State.categoryRules); };
+  window.persistCustomCategories = function () { persistToScriptable('customCategories', State.customCategories); };
+  window.persistBudgets = function () {
+    var data = [];
+    for (var i = 0; i < State.budgetGroups.length; i++) data.push(State.budgetGroups[i]);
+    for (var i = 0; i < State.budgets.length; i++) data.push(State.budgets[i]);
+    persistToScriptable('budgets', data);
+  };
+  window.persistContacts = function () { persistToScriptable('contacts', State.contacts); };
+  window.persistAccountOverrides = function () { persistToScriptable('accountOverrides', State.accountOverrides); };
+  window.persistProfiles = function () { persistToScriptable('profiles', State.profiles); };
+  window.persistFailed = function () { persistToScriptable('failed', State.failedLogs); };
+  window.persistAppendTx = function (txObj) {
+    // In dev mode, append to the stored transactions array
+    try {
+      var stored = localStorage.getItem('totals-dev-appendedTx');
+      var arr = stored ? JSON.parse(stored) : [];
+      arr.push(txObj);
+      localStorage.setItem('totals-dev-appendedTx', JSON.stringify(arr));
+    } catch (e) {}
+  };
+
+  // ── 6. Bootstrap the app ──
+  init();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{"name":"Main Savings","number":"1000456789012","bankId":"1","bankName":"CBE","bankFullName":"Commercial Bank of Ethiopia","createdAt":"2026-01-15T10:00:00.000Z"}
+{"name":"Salary Account","number":"1000999888012","bankId":"1","bankName":"CBE","bankFullName":"Commercial Bank of Ethiopia","createdAt":"2026-02-10T09:00:00.000Z"}
+{"name":"Business Account","number":"0143567890","bankId":"2","bankName":"Awash","bankFullName":"Awash Bank","createdAt":"2026-01-20T14:30:00.000Z"}
+{"name":"Mobile Wallet","number":"0912345678","bankId":"6","bankName":"Telebirr","bankFullName":"Telebirr","isDefault":true,"createdAt":"2026-02-01T08:00:00.000Z"}
+{"name":"Family Wallet","number":"0922334455","bankId":"6","bankName":"Telebirr","bankFullName":"Telebirr","isDefault":false,"createdAt":"2026-02-20T12:00:00.000Z"}
+{"name":"BOA Checking","number":"28901234567","bankId":"3","bankName":"BOA","bankFullName":"Bank Of Abyssinia","createdAt":"2026-02-05T11:00:00.000Z"}
+{"name":"Dashen Primary","number":"3456789012","bankId":"4","bankName":"Dashen","bankFullName":"Dashen Bank","createdAt":"2026-02-08T13:00:00.000Z"}
+{"name":"NIB Wallet","number":"5678901234","bankId":"7","bankName":"NIB","bankFullName":"Nib Bank","createdAt":"2026-02-12T10:00:00.000Z"}

@@ -1,0 +1,115 @@
+{
+  "banks": [
+    {
+      "id": 0,
+      "name": "Cash",
+      "shortName": "Cash",
+      "codes": [],
+      "image": "",
+      "maskPattern": 0,
+      "uniformMasking": false,
+      "simBased": false,
+      "virtual": true,
+      "colors": ["#6b7280", "#4b5563"]
+    },
+    {
+      "id": 1,
+      "name": "Commercial Bank Of Ethiopia",
+      "shortName": "CBE",
+      "codes": ["CBE"],
+      "image": "assets/images/cbe.png",
+      "maskPattern": 3,
+      "uniformMasking": true,
+      "simBased": false,
+      "colors": ["#1b0b2e", "#3a0f5c"]
+    },
+    {
+      "id": 2,
+      "name": "Awash Bank",
+      "shortName": "Awash",
+      "codes": ["Awash Bank"],
+      "image": "assets/images/awash.png",
+      "maskPattern": 0,
+      "uniformMasking": false,
+      "simBased": false,
+      "colors": ["#d97706", "#1a3a5c"]
+    },
+    {
+      "id": 3,
+      "name": "Bank Of Abyssinia",
+      "shortName": "BOA",
+      "codes": ["BOA"],
+      "image": "assets/images/boa.png",
+      "maskPattern": 2,
+      "uniformMasking": true,
+      "simBased": false,
+      "colors": ["#d9b90b", "#382e0c"]
+    },
+    {
+      "id": 4,
+      "name": "Dashen Bank",
+      "shortName": "Dashen",
+      "codes": ["DashenBank"],
+      "image": "assets/images/dashen.png",
+      "maskPattern": 3,
+      "uniformMasking": true,
+      "simBased": false,
+      "colors": ["#1a2d5c", "#344e7b"]
+    },
+    {
+      "id": 5,
+      "name": "Zemen Bank",
+      "shortName": "Zemen",
+      "codes": ["Zemen Bank"],
+      "image": "assets/images/zemen.png",
+      "maskPattern": 4,
+      "uniformMasking": true,
+      "simBased": false,
+      "colors": ["#dc2626", "#ffffff"]
+    },
+    {
+      "id": 6,
+      "name": "Telebirr",
+      "shortName": "Telebirr",
+      "codes": ["127"],
+      "image": "assets/images/telebirr.png",
+      "maskPattern": 0,
+      "uniformMasking": false,
+      "simBased": true,
+      "colors": ["#1d38e5", "#90d5ee"]
+    },
+    {
+      "id": 7,
+      "name": "Nib Bank",
+      "shortName": "NIB",
+      "codes": ["NIB"],
+      "image": "assets/images/nib.png",
+      "maskPattern": 4,
+      "uniformMasking": true,
+      "simBased": true,
+      "colors": ["#8b4513", "#ffd700"]
+    },
+    {
+      "id": 8,
+      "name": "M Pesa",
+      "shortName": "MPESA",
+      "codes": ["MPESA"],
+      "image": "assets/images/mpesa.png",
+      "maskPattern": 0,
+      "uniformMasking": false,
+      "simBased": true,
+      "colors": ["#00a859", "#ffffff"]
+    },
+    {
+      "id": 9,
+      "name": "Amhara Bank",
+      "shortName": "Aba",
+      "codes": ["Amhara Bank"],
+      "image": "assets/images/amhara.png",
+      "maskPattern": 3,
+      "uniformMasking": true,
+      "simBased": false,
+      "colors": ["#1d38e5", "#90d5ee"]
+    }
+  ]
+}
