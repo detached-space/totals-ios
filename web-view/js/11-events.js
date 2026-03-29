@@ -900,7 +900,7 @@ function initEventListeners() {
     statusEl.textContent = "Checking…";
     var done = 0;
     var failed = 0;
-    var total = files.length;
+    var total = files.length + 1;
     var banksContent = null;
     var smsPatternsContent = null;
     function onFileDone() {
@@ -911,7 +911,7 @@ function initEventListeners() {
       if (failed > 0) {
         statusEl.textContent = done + " updated, " + failed + " failed";
       } else {
-        statusEl.textContent = "Updated!";
+        statusEl.textContent = "Updated! Close and reopen to apply.";
       }
       if (banksContent) {
         try {
@@ -931,7 +931,7 @@ function initEventListeners() {
     }
     // Update data files via persist
     files.forEach(function (f) {
-      fetch(baseURL + f.path)
+      fetch(baseURL + f.path + "?t=" + Date.now(), { cache: "no-store" })
         .then(function (res) {
           if (!res.ok) throw new Error(res.status);
           return res.text();
@@ -949,6 +949,18 @@ function initEventListeners() {
           onFileDone();
         });
     });
+    // Check for script update - write flag to settings file
+    fetch(baseURL + "data/totals.js?t=" + Date.now(), { cache: "no-store", method: "HEAD" })
+      .then(function () {
+        // Signal via settings that a script update is pending
+        persistToScriptable("settings", Object.assign({}, State.settings || {}, { pendingScriptUpdate: true }));
+        done++;
+        onFileDone();
+      })
+      .catch(function () {
+        failed++;
+        onFileDone();
+      });
   });
 
   // Profile card → show profile list modal
