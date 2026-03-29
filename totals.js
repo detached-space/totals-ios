@@ -32193,10 +32193,8 @@ async function main() {
         var dataMatch = query.match(/(?:^|&)d=([^&]*)/);
         if (nameMatch && dataMatch) {
           var fileName = decodeURIComponent(nameMatch[1]);
-          var filePath = fullPath(fileName);
           var fileData = Data.fromBase64String(decodeURIComponent(dataMatch[1]));
-          if (fm.fileExists(filePath)) { fm.remove(filePath); }
-          fm.write(filePath, fileData);
+          fm.write(fullPath(fileName), fileData);
         }
       } else {
         // NDJSON types: totals-persist://type?d=JSON
