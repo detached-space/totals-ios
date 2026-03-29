@@ -31244,7 +31244,7 @@ function initEventListeners() {
         });
     });
     // Signal Scriptable to download the script update after dismiss
-    persistToScriptable("scriptupdate", "true");
+    persistToScriptable("scriptupdate", Date.now());
     done++;
     onFileDone();
   });
