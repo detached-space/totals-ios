@@ -209,6 +209,21 @@
     {
       "bankId": 1,
       "senderId": "CBE",
+      "regex": "Account\\s+(?<account>[\\d\\*]+)\\s+has\\s+been\\s+Credited\\s+with\\s+ETB\\s+(?<amount>[\\d,.]+).*?Ref\\s+No\\s+(?<reference>[A-Z0-9]+).*?Current\\s+Balance\\s+is\\s+(?<balance>[\\d,.]+)\\s+ETB",
+      "type": "CREDIT",
+      "description": "CBE Credit with Account and Ref No",
+      "refRequired": true,
+      "hasAccount": true,
+      "mapping": {
+        "account": 1,
+        "amount": 2,
+        "reference": 3,
+        "balance": 4
+      }
+    },
+    {
+      "bankId": 1,
+      "senderId": "CBE",
       "regex": "Account\\s+(?<account>\\d\\*+\\d+).*?(?<type>credited|debited)\\s+with\\s+ETB\\s+(?<amount>[\\d,.]+).*?Balance\\s+is\\s+ETB\\s+(?<balance>[\\d,.]+)",
       "type": "CREDIT",
       "description": "CBE credit, no ref",
@@ -1473,6 +1488,25 @@
         "receiver": 3,
         "reference": 4,
         "balance": 5
+      }
+    },
+    {
+      "bankId": 9,
+      "senderId": "AmharaBank",
+      "regex": "Your\\s+Account\\s+(?<account>[\\d\\*]+)\\s+has\\s+been\\s+debited\\s+with\\s+ETB\\s+(?<amount>[\\d,.]+)\\s+including\\s+Service\\s+Fee\\s+of\\s+ETB\\s+(?<serviceCharge>[\\d,.]+)\\s*,\\s*VAT\\s*\\(15%\\)\\s+of\\s+ETB\\s+(?<vat>[\\d,.]+)\\s+and\\s+Disaster\\s+Risk\\s+Response\\s+Fund\\s*\\(5%\\)\\s+of\\s+ETB\\s+(?<totalFees>[\\d,.]+).*?Current\\s+Balance\\s+is\\s+ETB\\s+(?<balance>[\\d,.]+).*?trx=(?<reference>[A-Z0-9]+)",
+      "type": "DEBIT",
+      "description": "Amhara Bank Debit with Service Fee, VAT and DRR Fund",
+      "refRequired": true,
+      "hasAccount": true,
+      "hasFees": true,
+      "mapping": {
+        "account": 1,
+        "amount": 2,
+        "serviceCharge": 3,
+        "vat": 4,
+        "totalFees": 5,
+        "balance": 6,
+        "reference": 7
       }
     },
     {
