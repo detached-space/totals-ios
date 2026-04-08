@@ -23657,17 +23657,18 @@ function showCategoryPicker(tx) {
   var txType = tx.type === "CREDIT" ? "income" : "expense";
   var filteredCats = getCategoryNamesByType(txType).sort(function(a, b) { return a.localeCompare(b); });
   for (var fi = 0; fi < filteredCats.length; fi++) {
-    var name = filteredCats[fi];
-    const catInfo = getCategoryInfo(name);
-    var isSelected = txCats.indexOf(name) !== -1;
-    const chip = document.createElement("div");
-    chip.className =
-      "category-picker-chip" + (isSelected ? " selected" : "");
-    chip.style.color = catInfo.color;
-    chip.style.borderColor = isSelected ? catInfo.color : "";
-    chip.innerHTML = `<span class="category-picker-chip-dot" style="background:${catInfo.color}"></span>${name}`;
-    chip.addEventListener("click", () => toggleTxCategory(tx, name));
-    chipsDiv.appendChild(chip);
+    (function(name) {
+      const catInfo = getCategoryInfo(name);
+      var isSelected = txCats.indexOf(name) !== -1;
+      const chip = document.createElement("div");
+      chip.className =
+        "category-picker-chip" + (isSelected ? " selected" : "");
+      chip.style.color = catInfo.color;
+      chip.style.borderColor = isSelected ? catInfo.color : "";
+      chip.innerHTML = `<span class="category-picker-chip-dot" style="background:${catInfo.color}"></span>${name}`;
+      chip.addEventListener("click", () => toggleTxCategory(tx, name));
+      chipsDiv.appendChild(chip);
+    })(filteredCats[fi]);
   }
 
   // Add remove option if any categories are set
@@ -24795,7 +24796,7 @@ function renderFailedSmsList() {
 function retryFailedSms(index) {
   var items = State.failedLogs.filter(function (f) {
     return f.message && f.message.trim();
-  });
+  }).reverse();
   var item = items[index];
   if (!item) return;
 
@@ -24920,9 +24921,9 @@ function dismissFailedSms(index) {
 }
 
 function removeFailedByIndex(visibleIndex) {
-  // Map visible index back to State.failedLogs index
+  // Visible list is reversed (newest first), so walk State.failedLogs backward
   var count = -1;
-  for (var i = 0; i < State.failedLogs.length; i++) {
+  for (var i = State.failedLogs.length - 1; i >= 0; i--) {
     if (State.failedLogs[i].message && State.failedLogs[i].message.trim()) {
       count++;
       if (count === visibleIndex) {
