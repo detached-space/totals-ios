@@ -209,7 +209,7 @@
     {
       "bankId": 1,
       "senderId": "CBE",
-      "regex": "Account\\s+(?<account>[\\d\\*]+)\\s+has\\s+been\\s+Credited\\s+with\\s+ETB\\s+(?<amount>[\\d,.]+)\\s+from\\s+(?<receiver>.+?),\\s+on.*?Ref\\s+No\\s+(?<reference>[A-Z0-9]+).*?Current\\s+Balance\\s+is\\s+(?<balance>[\\d,.]+)\\s+ETB",
+      "regex": "Account\\s+(?<account>[\\d\\*]+)\\s+has\\s+been\\s+Credited\\s+with\\s+ETB\\s+(?<amount>[\\d,.]+)\\s+from\\s+(?<receiver>.+?),\\s+on.*?Ref\\s+No\\s+(?<reference>[A-Z0-9]+).*?Current\\s+Balance\\s+is\\s+(?:ETB\\s+)?(?<balance>[\\d,.]+)(?:\\s+ETB)?",
       "type": "CREDIT",
       "description": "CBE Credit with Account and Ref No",
       "refRequired": true,
