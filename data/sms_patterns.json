@@ -102,6 +102,26 @@
   {
     "bankId": 1,
     "senderId": "CBE",
+    "regex": "A\\s+debit\\s+transaction\\s+of\\s+ETB\\s*(?<amount>[\\d,]+(?:\\.\\d+)?)\\s*\\.?\\s*has\\s+occurred\\s+on\\s+your\\s+account\\s+(?<account>[\\dXx*]+)[\\s\\S]*?Service\\s+charge\\s+of\\s+ETB\\s*(?<serviceCharge>[\\d,]+(?:\\.\\d+)?)\\s+and\\s+VAT\\s*\\(15%\\)\\s+of\\s+(?:ETB[O0]?\\s*)?(?<vat>[\\d,]*(?:\\.\\d+)?)\\s+and\\s+Disaster\\s+Recovery\\s*\\(5%\\)\\s+of\\s+(?:ETB[O0]?\\s*)?(?<disasterRecovery>[\\d,]*(?:\\.\\d+)?)\\s+with\\s+total\\s+of\\s+ETB\\s*(?<totalAmount>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?Your\\s+current\\s+balance\\s+is\\s+ETB\\s*(?<balance>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?https?:\\/\\/[^\\s\\/]+\\/(?<reference>[\\w\\-]+)",
+    "type": "DEBIT",
+    "description": "CBE Debit Transaction with Disaster Recovery Fee (Mbreciept URL hyphen reference)",
+    "refRequired": true,
+    "hasAccount": true,
+    "hasFees": true,
+    "mapping": {
+      "amount": 1,
+      "account": 2,
+      "serviceCharge": 3,
+      "vat": 4,
+      "disasterRecovery": 5,
+      "totalAmount": 6,
+      "balance": 7,
+      "reference": 8
+    }
+  },
+  {
+    "bankId": 1,
+    "senderId": "CBE",
     "regex": "A\\s+debit\\s+transaction\\s+of\\s+ETB\\s*(?<amount>[\\d,]+(?:\\.\\d+)?)\\s*\\.?\\s*has\\s+occurred\\s+on\\s+your\\s+account\\s+(?<account>[\\dXx*]+)[\\s\\S]*?Service\\s+charge\\s+of\\s+ETB\\s*(?<serviceCharge>[\\d,.]+)\\s+and\\s+VAT\\(15%\\)\\s+of\\s+(?:ETB\\s*)?(?<vat>[\\d,.]+)\\s+and\\s+Disaster\\s+Recovery\\(5%\\)\\s+of\\s+(?:ETB\\s*)?(?<disasterRecovery>[\\d,.]+)\\s+with\\s+total\\s+of\\s+ETB\\s*(?<totalAmount>[\\d,.]+)[\\s\\S]*?Your\\s+current\\s+balance\\s+is\\s+ETB\\s*(?<balance>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?https?://[^\\s/]+/(?<reference>[A-Za-z0-9]+)",
     "type": "DEBIT",
     "description": "CBE Debit Transaction with Disaster Recovery Fee (Dear Customer)",
