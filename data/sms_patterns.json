@@ -3,6 +3,49 @@
      {
     "bankId": 1,
     "senderId": "CBE",
+    "regex": "You\\s+have\\s+successfully\\s+transferred\\s+ETB\\s*(?<amount>[\\d,]+(?:\\.\\d+)?)\\s+from\\s+account\\s+(?<account>[\\dXx*]+)\\s+to\\s+account\\s+(?<receiverAccount>[\\dXx*]+)\\s*\\((?<receiver>[^)]+)\\)[\\s\\S]*?Service\\s+charge\\s+of\\s+ETB\\s*(?<serviceCharge>[\\d,]+(?:\\.\\d+)?)\\s+and\\s+VAT\\s*\\(15%\\)\\s+of\\s+(?:ETB[O0]?\\s*)?(?<vat>[\\d,]*(?:\\.\\d+)?)\\s+and\\s+Disaster\\s+Recovery\\s*\\(5%\\)\\s+of\\s+(?:ETB[O0]?\\s*)?(?<disasterRecovery>[\\d,]*(?:\\.\\d+)?)\\s+with\\s+total\\s+of\\s+ETB\\s*(?<totalAmount>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?Your\\s+current\\s+balance\\s+is\\s+ETB\\s*(?<balance>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?https?:\\/\\/[^\\s\\/]+\\/(?<reference>[\\w\\-]+)",
+    "type": "DEBIT",
+    "description": "CBE Successful Transfer with Disaster Recovery Fee (Mbreciept URL, ETBO typo tolerant)",
+    "refRequired": true,
+    "hasAccount": true,
+    "hasFees": true,
+    "mapping": {
+      "amount": 1,
+      "account": 2,
+      "receiverAccount": 3,
+      "receiver": 4,
+      "serviceCharge": 5,
+      "vat": 6,
+      "disasterRecovery": 7,
+      "totalAmount": 8,
+      "balance": 9,
+      "reference": 10
+    }
+  },
+  {
+    "bankId": 1,
+    "senderId": "CBE",
+    "regex": "You\\s+have\\s+successfully\\s+transferred\\s+ETB\\s*(?<amount>[\\d,]+(?:\\.\\d+)?)\\s+from\\s+account\\s+(?<account>[\\dXx*]+)\\s+to\\s+account\\s+(?<receiverAccount>[\\dXx*]+)\\s*\\((?<receiver>[^)]+)\\)[\\s\\S]*?Service\\s+charge\\s+of\\s+ETB\\s*(?<serviceCharge>[\\d,]+(?:\\.\\d+)?)\\s+and\\s+VAT\\s*\\(15%\\)\\s+of\\s+(?:ETB[O0]?\\s*)?(?<vat>[\\d,]*(?:\\.\\d+)?)\\s+and\\s+Disaster\\s+Recovery\\s*\\(5%\\)\\s+of\\s+(?:ETB[O0]?\\s*)?(?<disasterRecovery>[\\d,]*(?:\\.\\d+)?)\\s+with\\s+total\\s+of\\s+ETB\\s*(?<totalAmount>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?Your\\s+current\\s+balance\\s+is\\s+ETB\\s*(?<balance>[\\d,]+(?:\\.\\d+)?)",
+    "type": "DEBIT",
+    "description": "CBE Successful Transfer with Disaster Recovery Fee (no URL, ETBO typo tolerant)",
+    "refRequired": false,
+    "hasAccount": true,
+    "hasFees": true,
+    "mapping": {
+      "amount": 1,
+      "account": 2,
+      "receiverAccount": 3,
+      "receiver": 4,
+      "serviceCharge": 5,
+      "vat": 6,
+      "disasterRecovery": 7,
+      "totalAmount": 8,
+      "balance": 9
+    }
+  },
+  {
+    "bankId": 1,
+    "senderId": "CBE",
     "regex": "You\\s+have\\s+received\\s+ETB\\s*(?<amount>[\\d,]+(?:\\.\\d+)?)\\s+from\\s+account\\s+(?<senderAccount>[\\d\\*]+)\\s*\\((?<sender>[^)]+)\\)\\s+to\\s+your\\s+account\\s+(?<account>[\\d\\*]+)[\\s\\S]*?Your\\s+current\\s+balance\\s+is\\s+ETB\\s*(?<balance>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?https?:\\/\\/[^\\s\\/]+\\/(?<reference>[\\w\\-]+)",
     "type": "CREDIT",
     "description": "CBE Received from Account with Sender Name (Mbreciept URL)",
