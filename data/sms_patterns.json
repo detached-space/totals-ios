@@ -1,6 +1,6 @@
 {
   "patterns": [
-     {
+  {
     "bankId": 1,
     "senderId": "CBE",
     "regex": "You\\s+have\\s+successfully\\s+transferred\\s+ETB\\s*(?<amount>[\\d,]+(?:\\.\\d+)?)\\s+from\\s+account\\s+(?<account>[\\dXx*]+)\\s+to\\s+account\\s+(?<receiverAccount>[\\dXx*]+)\\s*\\((?<receiver>[^)]+)\\)[\\s\\S]*?Service\\s+charge\\s+of\\s+ETB\\s*(?<serviceCharge>[\\d,]+(?:\\.\\d+)?)\\s+and\\s+VAT\\s*\\(15%\\)\\s+of\\s+(?:ETB[O0]?\\s*)?(?<vat>[\\d,]*(?:\\.\\d+)?)\\s+and\\s+Disaster\\s+Recovery\\s*\\(5%\\)\\s+of\\s+(?:ETB[O0]?\\s*)?(?<disasterRecovery>[\\d,]*(?:\\.\\d+)?)\\s+with\\s+total\\s+of\\s+ETB\\s*(?<totalAmount>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?Your\\s+current\\s+balance\\s+is\\s+ETB\\s*(?<balance>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?https?:\\/\\/[^\\s\\/]+\\/(?<reference>[\\w\\-]+)",
@@ -58,6 +58,26 @@
       "account": 4,
       "balance": 5,
       "reference": 6
+    }
+  },
+  {
+    "bankId": 1,
+    "senderId": "CBE",
+    "regex": "Account\\s+(?<account>[\\d\\*]+)\\s+has\\s+been\\s+debited\\s+for\\s+(?<receiver>.+?)\\s+with\\s+ETB\\s*(?<amount>[\\d,]+(?:\\.\\d+)?)\\s+including\\s+(?:\\.?Service charge|\\.?service charge|\\.?S\\.charge|\\.?s\\.charge)\\s+ETB\\s*(?<serviceCharge>[\\d,]+(?:\\.\\d+)?)(?:\\s*ETB\\s*(?<disasterRecovery>[\\d,]+(?:\\.\\d+)?))?\\s+and\\s+VAT\\(15%\\)\\s*ETB\\s*(?<vat>[\\d,]+(?:\\.\\d+)?)[\\s\\S]*?Your\\s+Current\\s+Balance\\s+is\\s+ETB\\s*(?<balance>[\\dXx,]+(?:\\.\\d+)?)[\\s\\S]*?BranchReceipt\\/(?<reference>\\w+)",
+    "type": "DEBIT",
+    "description": "CBE Debited for Merchant with Service charge, Disaster Recovery and VAT (BranchReceipt URL)",
+    "refRequired": true,
+    "hasAccount": true,
+    "hasFees": true,
+    "mapping": {
+      "account": 1,
+      "receiver": 2,
+      "amount": 3,
+      "serviceCharge": 4,
+      "disasterRecovery": 5,
+      "vat": 6,
+      "balance": 7,
+      "reference": 8
     }
   },
   {
@@ -3361,5 +3381,5 @@
       "balance": 5
     }
   }
-  ]
+]     
 }
